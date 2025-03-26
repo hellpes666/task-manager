@@ -4,5 +4,6 @@ declare namespace NodeJS {
 		MONGODB_USERNAME: string;
 		MONGODB_USER_PASSWORD: string;
 		MONGODB_URI: string;
+		JWT_SECRET: string;
 	}
 }
