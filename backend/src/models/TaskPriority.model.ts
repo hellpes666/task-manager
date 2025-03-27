@@ -5,9 +5,12 @@ interface ITaskPriority {
 }
 type TaskPriorityModel = Model<ITaskPriority>;
 
-const TaskPrioritySchema = new Schema<ITaskPriority, TaskPriorityModel>({
-	name: { type: String, required: true },
-});
+const TaskPrioritySchema = new Schema<ITaskPriority, TaskPriorityModel>(
+	{
+		name: { type: String, required: true },
+	},
+	{ timestamps: true }
+);
 
 export const TaskPriority: TaskPriorityModel = model<
 	ITaskPriority,

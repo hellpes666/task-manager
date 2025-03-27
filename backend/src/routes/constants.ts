@@ -1,0 +1,9 @@
+const TASK_PRIORITIES_END_POINT = "/task-priorities";
+const TASK_STATUSES_END_POINT = "/task-statuses";
+const TASK_MANAGMENT_END_POINT = "";
+
+export {
+	TASK_PRIORITIES_END_POINT,
+	TASK_STATUSES_END_POINT,
+	TASK_MANAGMENT_END_POINT,
+};

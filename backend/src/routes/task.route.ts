@@ -10,10 +10,14 @@ import {
 	deleteTaskStatus,
 	getAllTaskStatuses,
 } from "../controllers/task/status";
+import {
+	TASK_PRIORITIES_END_POINT,
+	TASK_STATUSES_END_POINT,
+	TASK_MANAGMENT_END_POINT,
+} from "./constants";
+import { createTask, getAllTasks } from "../controllers/task/task-managment";
 
 export const taskRouter: Router = express.Router();
-const TASK_PRIORITIES_END_POINT = "/task-priorities";
-const TASK_STATUSES_END_POINT = "/task-statuses";
 
 taskRouter.get(TASK_PRIORITIES_END_POINT, protectAccess, getAllTaskPriorities);
 
@@ -34,3 +38,6 @@ taskRouter.delete(
 	protectAccess,
 	deleteTaskStatus
 );
+
+taskRouter.post(TASK_MANAGMENT_END_POINT, protectAccess, createTask);
+taskRouter.get(TASK_MANAGMENT_END_POINT, protectAccess, getAllTasks);
