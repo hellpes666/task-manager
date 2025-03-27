@@ -16,27 +16,30 @@ export const protectAccess = async (
 			res.status(401).json({
 				message: "Вы не авторизованы. No Token Provided.",
 			});
+		} else {
+			const decoded = jwt.verify(
+				token,
+				process.env.JWT_SECRET
+			) as JwtPayload & { userId: string };
+
+			if (!decoded || !decoded.userId) {
+				res.status(401).json({
+					message: "Unauthorized - Invalid Token",
+				});
+			}
+
+			const user = await User.findById(decoded.userId).select(
+				"-password"
+			);
+
+			if (!user) {
+				res.status(401).json({ message: "Пользователь не найден" });
+			}
+
+			//@ts-ignore
+			req.user = user;
+			next();
 		}
-
-		const decoded = jwt.verify(
-			token,
-			process.env.JWT_SECRET
-		) as JwtPayload & { userId: string };
-
-		if (!decoded || !decoded.userId) {
-			res.status(401).json({ message: "Unauthorized - Invalid Token" });
-		}
-
-		const user = await User.findById(decoded.userId).select("-password");
-
-		if (!user) {
-			res.status(401).json({ message: "Пользователь не найден" });
-		}
-
-		//@ts-ignore
-		req.user = user;
-
-		next();
 	} catch (error) {
 		handleError(error, "/middlewares/protectAccess.middleware.ts");
 		res.status(500).json({
