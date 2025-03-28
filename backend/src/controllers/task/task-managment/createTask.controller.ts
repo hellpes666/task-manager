@@ -19,6 +19,7 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 	try {
 		const taskData: CreateTaskRequestBody = req.body;
 		const currentUser = req.user;
+
 		if (!taskData) {
 			res.status(400).send({
 				message: "Введены не все данные или Данные некорректны.",
@@ -44,40 +45,16 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 				);
 			}
 
-			const deadline = new Date(taskData.deadline);
-			const startedDate = new Date(taskData.startedDate);
-			const millisecondsInADay = 1000 * 60 * 60 * 24;
-			const currentDay = new Date(Date.now());
-
-			console.log(deadline, startedDate, currentDay);
-
-			//@ts-ignore
-			const diffTimeToDeadline = Math.abs(deadline - currentDay);
-			const diffDaysToDeadline = Math.floor(
-				diffTimeToDeadline / millisecondsInADay
-			);
-
-			//@ts-ignore
-			const diffTimeFromStart = Math.abs(currentDay - startedDate);
-			const diffDaysFromStart = Math.floor(
-				diffTimeFromStart / millisecondsInADay
-			);
-
-			console.log(`Дней до дедлайна: ${diffDaysToDeadline}`);
-			console.log(`Дней с начала задачи: ${diffDaysFromStart}`);
-
-			//TODO переделать модели: Task, Priority, Status - в последние добавить цвет
+			//TODO переделать модели: Priority, Status - в последние добавить цвет
 			await Task.create({
 				title: taskData.title,
-				status: currentStatus,
+				statusId: taskData.statusId,
 				startedDate: taskData.startedDate,
 				deadline: taskData.deadline,
-				priority: currentPriority,
+				priorityId: taskData.priorityId,
 				description: taskData.description,
-				creator: currentUser?.name + " " + currentUser?.lastName,
+				creatorId: currentUser?._id,
 				assignedToEmployes: assignedEmployes,
-				daysLeftToDeadline: diffDaysToDeadline,
-				daysSpentFromStart: diffDaysFromStart,
 			});
 
 			res.status(200).send({
@@ -91,8 +68,6 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 					description: taskData.description,
 					creator: currentUser?.name + " " + currentUser?.lastName,
 					assignedToEmployes: assignedEmployes,
-					daysLeftToDeadline: diffDaysToDeadline,
-					daysSpentFromStart: diffDaysFromStart,
 				},
 			});
 		}

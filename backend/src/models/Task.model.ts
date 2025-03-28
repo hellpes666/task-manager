@@ -9,8 +9,6 @@ interface ITask {
 	description: string;
 	creatorId: mongoose.Schema.Types.ObjectId;
 	assignedToIds: Array<mongoose.Schema.Types.ObjectId>;
-	daysLeftToDeadline: string;
-	daysSpentFromStart: string;
 }
 type TaskModel = Model<ITask>;
 
@@ -41,8 +39,6 @@ const taskSchema = new Schema<ITask, TaskModel>(
 				ref: "User",
 			},
 		],
-		daysLeftToDeadline: { type: String },
-		daysSpentFromStart: { type: String },
 	},
 	{ timestamps: true }
 );
