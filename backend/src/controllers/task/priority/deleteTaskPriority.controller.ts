@@ -3,12 +3,14 @@ import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
 import { TaskPriority } from "../../../models";
 
+type DeleteTaskPriorityRequestBody = Request<{ id: string }, {}, {}>;
 export const deleteTaskPriority = async (
-	req: Request,
+	req: DeleteTaskPriorityRequestBody,
 	res: Response
 ): Promise<void> => {
 	try {
 		const { id } = req.params;
+
 		if (!id) {
 			res.status(400).send({ message: "Некорректные данные." });
 			return;
@@ -20,6 +22,7 @@ export const deleteTaskPriority = async (
 			res.status(200).send({
 				message: "Приоритетность задачи успешно удалена.",
 			});
+
 			return;
 		}
 	} catch (error) {

@@ -2,8 +2,10 @@ import express, { Router } from "express";
 import { protectAccess } from "../middlewares/protectAccess.middleware";
 import {
 	createTaskPriority,
+	deleteTaskPriorities,
 	deleteTaskPriority,
 	getAllTaskPriorities,
+	patchTaskPriority,
 } from "../controllers/task/priority";
 import {
 	createTaskStatus,
@@ -23,10 +25,20 @@ export const taskRouter: Router = express.Router();
 
 taskRouter.get(TASK_PRIORITIES_END_POINT, protectAccess, getAllTaskPriorities);
 taskRouter.post(TASK_PRIORITIES_END_POINT, protectAccess, createTaskPriority);
+taskRouter.patch(
+	TASK_PRIORITIES_END_POINT + "/:id",
+	protectAccess,
+	patchTaskPriority
+);
 taskRouter.delete(
 	TASK_PRIORITIES_END_POINT + "/:id",
 	protectAccess,
 	deleteTaskPriority
+);
+taskRouter.delete(
+	TASK_PRIORITIES_END_POINT,
+	protectAccess,
+	deleteTaskPriorities
 );
 
 taskRouter.get(TASK_STATUSES_END_POINT, protectAccess, getAllTaskStatuses);

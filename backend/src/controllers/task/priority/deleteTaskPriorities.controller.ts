@@ -1,22 +1,21 @@
 import { Response, Request } from "express";
 import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
-import { TaskStatus } from "../../../models";
+import { TaskPriority } from "../../../models";
 
-export const deleteTaskStatuses = async (
+export const deleteTaskPriorities = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
 	try {
-		await TaskStatus.deleteMany();
+		await TaskPriority.deleteMany({});
 
 		res.status(200).send({
-			message: "Статусы задач успешно удалены.",
+			message: "Приоритетности задач успешно удалены.",
 		});
-
 		return;
 	} catch (error) {
-		handleError(error, errorPath("deleteTaskStatuses.controller.ts"));
+		handleError(error, errorPath("deleteTaskPriorities.controller.ts"));
 		res.status(500).json({
 			message: "Произошла ошибка. Попробуйте снова",
 		});

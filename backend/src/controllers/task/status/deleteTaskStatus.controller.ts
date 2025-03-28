@@ -21,7 +21,7 @@ export const deleteTaskStatus = async (
 			});
 
 			res.status(200).send({
-				message: "Приоритетность задачи успешно удалена.",
+				message: "Статус задачи успешно удален.",
 			});
 
 			return;
