@@ -5,7 +5,7 @@ import { errorPath } from "../errorPath";
 import { User } from "../../models";
 import bcrypt from "bcryptjs";
 
-export const signup = async (req: Request, res: Response) => {
+export const signup = async (req: Request, res: Response): Promise<void> => {
 	try {
 		const { name, lastName, email, password } = SignupRequestBody.parse(
 			req.body
@@ -19,6 +19,7 @@ export const signup = async (req: Request, res: Response) => {
 			res.status(400).json({
 				message: "Пользователь уже зарегистрирован.",
 			});
+			return;
 		}
 
 		const salt = await bcrypt.genSalt(15);
@@ -39,6 +40,7 @@ export const signup = async (req: Request, res: Response) => {
 			lastName,
 			email,
 		});
+		return;
 	} catch (error) {
 		handleError(error, errorPath("signup.controller.ts"));
 		res.status(500).json({

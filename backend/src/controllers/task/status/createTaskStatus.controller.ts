@@ -3,21 +3,35 @@ import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
 import { TaskStatus } from "../../../models";
 
-type CreateTaskStatusRequestBody = Request<{}, {}, { name: string }>;
+type CreateTaskStatusRequestBody = Request<
+	{},
+	{},
+	{ name: string; color?: string }
+>;
 export const createTaskStatus = async (
 	req: CreateTaskStatusRequestBody,
 	res: Response
-) => {
+): Promise<void> => {
 	try {
-		const { name } = req.body;
+		const { name, color } = req.body;
+
 		if (!name || name.length <= 2) {
 			res.status(400).send({ message: "Некорректные данные." });
+			return;
 		} else {
 			await TaskStatus.create({
 				name,
+				color,
 			});
 
-			res.status(200).send({ message: "Статус задачи успешно создан." });
+			res.status(200).send({
+				message: "Статус задачи успешно создан.",
+				data: {
+					name,
+					color,
+				},
+			});
+			return;
 		}
 	} catch (error) {
 		handleError(error, errorPath("createTaskStatus.controller.ts"));

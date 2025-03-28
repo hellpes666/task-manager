@@ -3,17 +3,20 @@ import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
 import { TaskStatus } from "../../../models";
 
-export const getAllTaskStatuses = async (
+export const deleteTaskStatuses = async (
 	req: Request,
 	res: Response
 ): Promise<void> => {
 	try {
-		const statuses = await TaskStatus.find({});
+		await TaskStatus.deleteMany();
 
-		res.status(200).send({ data: statuses });
+		res.status(200).send({
+			message: "Приоритетности задачи успешно удалены.",
+		});
+
 		return;
 	} catch (error) {
-		handleError(error, errorPath("getAllTaskStatuses.controller.ts"));
+		handleError(error, errorPath("deleteTaskStatuses.controller.ts"));
 		res.status(500).json({
 			message: "Произошла ошибка. Попробуйте снова",
 		});

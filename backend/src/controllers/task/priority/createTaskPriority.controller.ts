@@ -7,17 +7,21 @@ type CreateTaskPriorityRequestBody = Request<{}, {}, { name: string }>;
 export const createTaskPriority = async (
 	req: CreateTaskPriorityRequestBody,
 	res: Response
-) => {
+): Promise<void> => {
 	try {
 		const { name } = req.body;
 		if (!name || name.length <= 2) {
 			res.status(400).send({ message: "Некорректные данные." });
+			return;
 		} else {
 			await TaskPriority.create({
 				name,
 			});
 
-			res.status(200).send({ message: "Приоритетность задачи успешно создан." });
+			res.status(200).send({
+				message: "Приоритетность задачи успешно создан.",
+			});
+			return;
 		}
 	} catch (error) {
 		handleError(error, errorPath("createTaskPriority.controller.ts"));

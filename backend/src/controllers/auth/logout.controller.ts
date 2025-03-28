@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import { handleError } from "../../lib";
 import { errorPath } from "../errorPath";
 
-export const logout = async (req: Request, res: Response) => {
+export const logout = async (req: Request, res: Response): Promise<void> => {
 	try {
 		res.cookie("jwt", "", { maxAge: 0 });
 		res.status(200).json({
 			message: "Вы успешно вышли из акаунта. Будем ждать вас снова!",
 		});
+		return;
 	} catch (error) {
 		handleError(error, errorPath("logout.controller.ts"));
 		res.status(500).json({

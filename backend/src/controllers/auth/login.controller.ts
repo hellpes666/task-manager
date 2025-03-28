@@ -8,7 +8,7 @@ type LoginRequestBody = { email: string; password: string };
 export const login = async (
 	req: Request<{}, {}, LoginRequestBody>,
 	res: Response
-) => {
+): Promise<void> => {
 	try {
 		const { email, password } = req.body;
 
@@ -17,6 +17,7 @@ export const login = async (
 		});
 		if (!user) {
 			res.status(401).json({ message: "Пользователь не найден." });
+			return;
 		} else {
 			const PasswordFromUserIsEqualToDb = await bcrypt.compare(
 				password,
@@ -24,6 +25,7 @@ export const login = async (
 			);
 			if (!PasswordFromUserIsEqualToDb) {
 				res.status(401).json({ message: "Неверные учетные данные." });
+				return;
 			} else {
 				generateJWToken(user._id.toString(), res);
 
@@ -34,6 +36,7 @@ export const login = async (
 					lastName: user.lastName,
 					email: user.email,
 				});
+				return;
 			}
 		}
 	} catch (error) {

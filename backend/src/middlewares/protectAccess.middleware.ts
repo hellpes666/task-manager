@@ -8,7 +8,7 @@ export const protectAccess = async (
 	req: ICustomRequest,
 	res: Response,
 	next: NextFunction
-) => {
+): Promise<void> => {
 	try {
 		const token = req.cookies.jwt;
 
@@ -16,6 +16,7 @@ export const protectAccess = async (
 			res.status(401).json({
 				message: "Вы не авторизованы. No Token Provided.",
 			});
+			return;
 		} else {
 			const decoded = jwt.verify(
 				token,
@@ -26,6 +27,7 @@ export const protectAccess = async (
 				res.status(401).json({
 					message: "Unauthorized - Invalid Token",
 				});
+				return;
 			}
 
 			const user = await User.findById(decoded.userId).select(
@@ -34,6 +36,7 @@ export const protectAccess = async (
 
 			if (!user) {
 				res.status(401).json({ message: "Пользователь не найден" });
+				return;
 			}
 
 			//@ts-ignore
