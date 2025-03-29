@@ -4,7 +4,7 @@ import { errorPath } from "../../errorPath";
 import { Task, TaskPriority, TaskStatus, User } from "../../../models";
 import { ICustomRequest } from "../../auth/checkAuth.controller";
 
-type CreateTaskRequestBody = {
+export type CreateTaskRequestBody = {
 	title: string;
 	statusId: string;
 	startedDate: Date;
