@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router-dom';
 import { Header } from './components';
 import { Layout } from './ui';
-import { MainPage } from './pages';
+import { MainPage, TaskManagmentPage } from './pages';
 
 function App() {
     return (
@@ -10,6 +10,7 @@ function App() {
 
             <Routes>
                 <Route path="/" element={<MainPage />} />
+                <Route path="/task-managment" element={<TaskManagmentPage />} />
             </Routes>
         </Layout>
     );

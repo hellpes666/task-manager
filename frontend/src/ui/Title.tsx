@@ -12,7 +12,7 @@ export const Title: React.FC<ITitle> = ({ title, reveal, className }) => {
     return (
         <h2
             className={twMerge(
-                'text-lg font-extrabold md:text-xl xl:text-3xl',
+                'text-secondary-content text-lg font-extrabold md:text-xl xl:text-3xl',
                 className
             )}
         >
