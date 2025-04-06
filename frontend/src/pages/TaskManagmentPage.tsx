@@ -44,11 +44,26 @@ const Backlog = () => {
 };
 
 const TaskGroup = () => {
-    return <div className=""></div>;
+    return (
+        <div className="bg-base-content h-[90%] min-w-100 rounded-lg border-2 border-[#CC0029] px-6 py-3">
+            <Title
+                title="Theme"
+                reveal={false}
+                className="text-base-300 font-medium"
+            />
+            <div className="mt-1 w-full rounded-full border-[1px] border-[#666]/20" />
+        </div>
+    );
 };
 
 const TasksSection = () => {
-    return <div className=""></div>;
+    return (
+        <section className="bg-base-300 mt-10 flex h-[70vh] w-full items-center gap-16 overflow-x-auto scroll-smooth px-15 pb-5">
+            {[1, 2, 3, 4, 5, 6, 4, 5, 6].map(() => (
+                <TaskGroup />
+            ))}
+        </section>
+    );
 };
 
 export const TaskManagmentPage = () => {
@@ -60,7 +75,9 @@ export const TaskManagmentPage = () => {
                 className="text-accent font-bold uppercase"
             />
 
-            <div className="flex-1">12</div>
+            <div className="flex-1">
+                <TasksSection />
+            </div>
             <Backlog />
         </div>
     );
