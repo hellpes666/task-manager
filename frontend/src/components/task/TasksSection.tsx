@@ -1,5 +1,5 @@
-import { TASKS_GROUP } from './groupData';
 import { TasksGroup } from './TasksGroup';
+import { TASKS_GROUP } from './groupData';
 
 export const TasksSection = () => {
     return (

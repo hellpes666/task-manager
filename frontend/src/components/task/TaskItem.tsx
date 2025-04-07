@@ -1,4 +1,3 @@
-import { Hand } from 'lucide-react';
 import React from 'react';
 import { ITaskItem } from './Task.model';
 import { getRGBA } from '../../lib';
@@ -11,8 +10,8 @@ export const TaskItem: React.FC<ITaskItem> = ({ id, title, priorityColor }) => {
 
     return (
         <div
-            className="bg-base-content mx-auto flex max-w-45 min-w-45 flex-col items-start gap-1 rounded-2xl p-2"
-            id={id}
+            className="bg-base-100 draggable-item mx-auto flex max-w-40 min-w-40 cursor-grab items-center gap-1 rounded-2xl p-3"
+            draggable
         >
             <div className="flex w-full items-center gap-2">
                 <div
@@ -22,13 +21,24 @@ export const TaskItem: React.FC<ITaskItem> = ({ id, title, priorityColor }) => {
                         backgroundColor: backgroundColor,
                     }}
                 />
-                <h3 className="text-accent-content max-w-[120px] truncate font-bold">
+                <h3 className="text-primary-content max-w-[80px] truncate font-bold">
                     {title}
                 </h3>
-                {/* <Grab /> */}
             </div>
-            <div className="w-full rounded-full border-[1px] border-[#666]/20" />
-            <Hand color="#666" size={18} className="mx-auto" />
+            <svg
+                className="size-6"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                id="fi_3793594"
+                fill="#666"
+            >
+                <circle cx="8" cy="4" r="2"></circle>
+                <circle cx="8" cy="12" r="2"></circle>
+                <circle cx="8" cy="20" r="2"></circle>
+                <circle cx="16" cy="4" r="2"></circle>
+                <circle cx="16" cy="12" r="2"></circle>
+                <circle cx="16" cy="20" r="2"></circle>
+            </svg>
         </div>
     );
 };

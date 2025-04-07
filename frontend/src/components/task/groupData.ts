@@ -1,14 +1,52 @@
 import { ITasksGroup } from './TasksGroup';
 
 export const TASKS_GROUP: ITasksGroup[] = [
-    { groupName: 'Группа 1', borderColor: '#FF5733' },
-    { groupName: 'Группа 2', borderColor: '#33FF57' },
-    { groupName: 'Группа 3', borderColor: '#3357FF' },
-    { groupName: 'Группа 4', borderColor: '#F1C40F' },
-    { groupName: 'Группа 5', borderColor: '#9B59B6' },
-    { groupName: 'Группа 6', borderColor: '#E67E22' },
-    { groupName: 'Группа 7', borderColor: '#2ECC71' },
-    { groupName: 'Группа 8', borderColor: '#3498DB' },
-    { groupName: 'Группа 9', borderColor: '#E74C3C' },
-    { groupName: 'Группа 10', borderColor: '#8E44AD' },
+    {
+        groupName: 'Started',
+        borderColor: '#FF5733',
+        tasks: [
+            {
+                id: '1247811824',
+                title: 'Started v1',
+                priorityColor: '#FF0000',
+            },
+            {
+                id: '2153231523',
+                title: 'Started v2',
+                priorityColor: '#00FFFF',
+            },
+        ],
+    },
+    {
+        groupName: 'In Progress',
+        borderColor: '#33FF57',
+        tasks: [
+            {
+                id: '6344553124',
+                title: 'Progress 1',
+                priorityColor: '#FF0FG0',
+            },
+            {
+                id: '87648678476',
+                title: 'Progress 2',
+                priorityColor: '#FFF',
+            },
+        ],
+    },
+    {
+        groupName: 'Done',
+        borderColor: '#3357FF',
+        tasks: [
+            {
+                id: '1423553434534',
+                title: 'Done v1',
+                priorityColor: '#FFD23D',
+            },
+            {
+                id: '753643456',
+                title: 'Done v2',
+                priorityColor: '#DD00FF',
+            },
+        ],
+    },
 ];

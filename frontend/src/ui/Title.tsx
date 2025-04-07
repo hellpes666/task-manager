@@ -8,7 +8,6 @@ interface ITitle {
 }
 
 export const Title: React.FC<ITitle> = ({ title, reveal, className }) => {
-    console.log(reveal);
     return (
         <h2
             className={twMerge(
