@@ -13,10 +13,9 @@ export const patchTask = (req: PatchTaskRequest, res: Response) => {
 	try {
 		const { id: taskId } = req.params;
 		const { _id: currentEditor } = req.user;
-		const {c} = req.body
+		const { c } = req.body;
 
-		if (editData.crea)
-
+		// if (editData.crea)
 	} catch (error) {
 		handleError(error, errorPath("patchTask.controller.ts"));
 		res.status(500).json({

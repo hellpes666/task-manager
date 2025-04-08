@@ -6,7 +6,7 @@ export interface IUser {
 	lastName: string;
 	email: string;
 	password: string;
-	profilePicture?: String; //TODO Изменить, если потребуется
+	profilePicture?: string; //TODO Изменить, если потребуется
 }
 type UserModel = Model<IUser>;
 

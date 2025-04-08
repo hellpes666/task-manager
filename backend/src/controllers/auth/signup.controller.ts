@@ -36,9 +36,10 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
 
 		res.status(201).send({
 			message: "Пользователь успешно создан",
-			name,
-			lastName,
-			email,
+			_id: newUser._id,
+			name: newUser.name,
+			lastName: newUser.lastName,
+			email: newUser.email,
 		});
 		return;
 	} catch (error) {

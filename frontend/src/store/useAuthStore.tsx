@@ -2,11 +2,12 @@ import { create } from 'zustand';
 import { IAuthUser, IUserData } from '../entity/User.entity';
 import { axiosInstance } from '../lib';
 import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 interface IAuthState {
     authUser: IAuthUser | null;
 
-    isChekingAuth: boolean;
+    isCheckingAuth: boolean;
     isSingningUp: boolean;
     isLoggingIn: boolean;
 
@@ -18,79 +19,84 @@ interface IAuthState {
 
 const AUTH_BASE_URL = '/auth';
 
-const isError = (err: unknown): err is Error => {
-    return err instanceof Error;
+const isError = (err: unknown): err is AxiosError => {
+    return err instanceof AxiosError;
 };
 
-const catchBlock = (
-    err: unknown,
-    toastMessage: string,
-    errPlace?: string
-): void => {
+const catchBlock = (err: unknown, errPlace?: string): void => {
     if (isError(err)) {
         console.log(`Ошибка ${errPlace ? `в ${errPlace}` : ''}: `, err.message);
+		
+        toast.error(err.response?.data?.message || 'Неизвестная ошибка');
+
     } else {
         console.log(
             `Неизвестная ошибка ${errPlace ? `в ${errPlace}` : ''}: `,
             err
         );
     }
-
-    toast.error(toastMessage);
 };
 
 export const useAuthStore = create<IAuthState>((set) => ({
     authUser: null,
-    isChekingAuth: true,
+    isCheckingAuth: true,
     isSingningUp: false,
     isLoggingIn: false,
 
     signup: async (data) => {
-        const res = await axiosInstance.post(AUTH_BASE_URL + '/signup', data);
         set({ isSingningUp: true });
 
         try {
+            const res = await axiosInstance.post(
+                AUTH_BASE_URL + '/signup',
+                data
+            );
             set({ authUser: res.data });
             toast.success(res.data.message);
         } catch (error) {
-            catchBlock(error, res.data.message, 'signup');
+            catchBlock(error, 'signup');
         } finally {
             set({ isSingningUp: false });
         }
     },
 
     login: async (data) => {
-        const res = await axiosInstance.post(AUTH_BASE_URL + '/login', data);
         set({ isLoggingIn: true });
+
         try {
+            const res = await axiosInstance.post(
+                AUTH_BASE_URL + '/login',
+                data
+            );
             set({ authUser: res.data });
             toast.success(res.data.message);
         } catch (error) {
-            catchBlock(error, res.data.message, 'login');
+            catchBlock(error, 'login');
         } finally {
             set({ isLoggingIn: false });
         }
     },
     logout: async () => {
-        const res = await axiosInstance.post(AUTH_BASE_URL + '/logout');
         try {
+            const res = await axiosInstance.post(AUTH_BASE_URL + '/logout');
             set({ authUser: null });
             toast.success(res.data.message);
         } catch (error) {
-            catchBlock(error, res.data.message, 'logout');
+            catchBlock(error, 'logout');
         }
     },
     checkAuth: async () => {
-        const res = await axiosInstance.post(AUTH_BASE_URL + '/user');
-        set({ isChekingAuth: true });
-
+        set({ isCheckingAuth: true });
         try {
+            const res = await axiosInstance.get(AUTH_BASE_URL + '/user');
+            set({ isCheckingAuth: true });
             set({ authUser: res.data });
         } catch (error) {
             set({ authUser: null });
-            catchBlock(error, res.data.message, 'checkAuth');
+
+            catchBlock(error, 'check Auth');
         } finally {
-            set({ isChekingAuth: false });
+            set({ isCheckingAuth: false });
         }
     },
 }));
