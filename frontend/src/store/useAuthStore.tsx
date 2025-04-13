@@ -8,7 +8,7 @@ interface IAuthState {
     authUser: IAuthUser | null;
 
     isCheckingAuth: boolean;
-    isSingningUp: boolean;
+    isSigningUp: boolean;
     isLoggingIn: boolean;
 
     signup: (data: IUserData) => void;
@@ -40,11 +40,11 @@ const catchBlock = (err: unknown, errPlace?: string): void => {
 export const useAuthStore = create<IAuthState>((set) => ({
     authUser: null,
     isCheckingAuth: true,
-    isSingningUp: false,
+    isSigningUp: false,
     isLoggingIn: false,
 
     signup: async (data) => {
-        set({ isSingningUp: true });
+        set({ isSigningUp: true });
 
         try {
             const res = await axiosInstance.post(
@@ -56,7 +56,7 @@ export const useAuthStore = create<IAuthState>((set) => ({
         } catch (error) {
             catchBlock(error, 'signup');
         } finally {
-            set({ isSingningUp: false });
+            set({ isSigningUp: false });
         }
     },
 

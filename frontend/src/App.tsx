@@ -1,7 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { Header } from './components';
 import { Layout } from './ui';
-import { AuthPage, MainPage, TaskManagmentPage } from './pages';
+import { AuthPage, MainPage, ProfilePage, TaskManagmentPage } from './pages';
 import { useAuthStore } from './store/useAuthStore';
 import { JSX, useEffect } from 'react';
 import { Loader } from 'lucide-react';
@@ -46,11 +46,20 @@ function App() {
                         '/login'
                     )}
                 />
+				
                 <Route
                     path="/task-managment"
                     element={redirectNotAuthUser(
                         authUser,
                         <TaskManagmentPage />,
+                        '/login'
+                    )}
+                />
+                <Route
+                    path="/profile"
+                    element={redirectNotAuthUser(
+                        authUser,
+                        <ProfilePage />,
                         '/login'
                     )}
                 />
