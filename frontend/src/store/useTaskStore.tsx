@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { ITask, ITaskPriority, ITaskStatus } from '../entity/Task.entity';
+import { axiosInstance, catchBlock } from '../lib';
 
 const TASK_BASE_URL = '/tasks';
 const TASK_PRIORITIES = TASK_BASE_URL + '/task-priorities';
@@ -48,7 +49,15 @@ export const useTaskStore = create<ITaskState>((set) => ({
     isLoadingAllPriorities: false,
     isCreatingNewPriority: false,
 
-    getAllTasks: () => {},
+    getAllTasks: async () => {
+		set({isLoadingAllTasks: true})
+
+		try {
+			const res = await axiosInstance.get(TASK_BASE_URL)
+		} catch (error) {
+			catchBlock(error, 'getAllTasks')
+		}
+	},
     createNewTask: (data) => {},
     deleteTask: (statusId) => {},
 

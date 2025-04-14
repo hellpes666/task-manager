@@ -1,4 +1,5 @@
 import { axiosInstance } from './axiosInstance';
+import { catchBlock } from './catchFetchErrorAndHandle';
 import { getRGBA } from './getRGBA';
 
-export { getRGBA, axiosInstance };
+export { catchBlock, getRGBA, axiosInstance };

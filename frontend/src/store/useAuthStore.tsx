@@ -1,8 +1,7 @@
 import { create } from 'zustand';
 import { IAuthUser, IUserData } from '../entity/User.entity';
-import { axiosInstance } from '../lib';
+import { axiosInstance, catchBlock } from '../lib';
 import toast from 'react-hot-toast';
-import { AxiosError } from 'axios';
 
 interface IAuthState {
     authUser: IAuthUser | null;
@@ -18,24 +17,6 @@ interface IAuthState {
 }
 
 const AUTH_BASE_URL = '/auth';
-
-const isError = (err: unknown): err is AxiosError => {
-    return err instanceof AxiosError;
-};
-
-const catchBlock = (err: unknown, errPlace?: string): void => {
-    if (isError(err)) {
-        console.log(`Ошибка ${errPlace ? `в ${errPlace}` : ''}: `, err.message);
-		
-        toast.error(err.response?.data?.message || 'Неизвестная ошибка');
-
-    } else {
-        console.log(
-            `Неизвестная ошибка ${errPlace ? `в ${errPlace}` : ''}: `,
-            err
-        );
-    }
-};
 
 export const useAuthStore = create<IAuthState>((set) => ({
     authUser: null,
