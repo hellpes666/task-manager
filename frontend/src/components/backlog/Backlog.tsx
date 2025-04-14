@@ -1,5 +1,6 @@
 import { Title } from './../../ui';
 import { BacklogTasksSection } from './BacklogTasksSection';
+import { TASKS } from './data';
 
 export const Backlog = () => {
     return (
@@ -9,7 +10,15 @@ export const Backlog = () => {
                 reveal={false}
                 className="text-secondary-content mb-5 font-bold uppercase"
             />
-            <BacklogTasksSection />
+            {TASKS.length === 0 ? (
+                <Title
+                    title="There is no one task"
+                    className="bg-warning text-warning-content 	flex h-full items-center justify-center rounded-3xl"
+                    reveal={false}
+                />
+            ) : (
+                <BacklogTasksSection />
+            )}
         </footer>
     );
 };
