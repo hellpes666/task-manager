@@ -9,6 +9,8 @@ type PriorityFormValues = {
 export const PriorityForm = ({ toggleModal }: { toggleModal: () => void }) => {
     const { register, handleSubmit } = useForm<PriorityFormValues>();
 
+	
+
     return (
         <ModalLayout
             title="Добавить приоритет"
@@ -22,10 +24,10 @@ export const PriorityForm = ({ toggleModal }: { toggleModal: () => void }) => {
                     {...register('priorityName')}
                 />
 
-                <FormSelectWithColor
+                {/* <FormSelectWithColor
                     colorLabel="Цвет приоритета"
                     colorProps={register('priorityColor')}
-                />
+                /> */}
             </div>
         </ModalLayout>
     );

@@ -16,6 +16,9 @@ interface ITaskState {
     activeTasks: ITasksData[] | null;
     backlog: ITasksData | null;
 
+    statuses: Array<ITaskStatus> | null;
+    priorities: Array<ITaskPriority> | null;
+
     isLoadingAllTasks: boolean;
     isCreatingNewTask: boolean;
 
@@ -39,6 +42,8 @@ interface ITaskState {
 }
 
 export const useTaskStore = create<ITaskState>((set) => ({
+    statuses: null,
+    priorities: null,
     activeTasks: null,
     backlog: null,
     isLoadingAllTasks: false,
@@ -65,11 +70,36 @@ export const useTaskStore = create<ITaskState>((set) => ({
     createNewTask: (data) => {},
     deleteTask: (statusId) => {},
 
-    getAllStatuses: () => {},
+    getAllStatuses: async () => {
+        set({ isLoadingAllStatuses: true });
+
+        try {
+            const res: { data: { data: Array<ITaskStatus> } } =
+                await axiosInstance.get(TASK_STATUSES);
+            set({ statuses: res.data.data });
+            console.log(res.data);
+        } catch (error) {
+            catchBlock(error, 'getAllStatuses');
+        } finally {
+            set({ isLoadingAllStatuses: false });
+        }
+    },
     createNewStatus: (data) => {},
     deleteStatus: (statusId) => {},
 
-    getAllPriorities: () => {},
+    getAllPriorities: async () => {
+        set({ isLoadingAllPriorities: true });
+
+        try {
+            const res: { data: { data: Array<ITaskPriority> } } =
+                await axiosInstance.get(TASK_PRIORITIES);
+            set({ priorities: res.data.data });
+        } catch (error) {
+            catchBlock(error, 'getAllStatuses');
+        } finally {
+            set({ isLoadingAllPriorities: false });
+        }
+    },
     createNewPriority: (data) => {},
     deletePriority: (priorityId) => {},
 }));

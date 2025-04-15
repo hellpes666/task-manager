@@ -30,7 +30,6 @@ export interface ITasksResponse {
 export interface ITaskPriority {
     _id: string;
     name: string;
-    color: string;
 }
 
 export interface ITaskStatus {

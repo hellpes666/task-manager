@@ -18,7 +18,7 @@ export const TasksGroup: React.FC<ITasksData> = (props) => {
             <div className="mt-1 w-full rounded-full border-[1px] border-[#666]/20" />
             <div className="mt-5 flex max-h-[90%] flex-wrap items-center justify-center overflow-y-auto">
                 {props.tasks.map((props) => (
-                    <ActiveTask {...props} />
+                    <ActiveTask {...props} key={props._id} />
                 ))}
             </div>
         </div>
