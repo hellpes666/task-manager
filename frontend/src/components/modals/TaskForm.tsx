@@ -1,6 +1,6 @@
-import { useForm } from 'react-hook-form';
+import { Resolver, useForm } from 'react-hook-form';
 import { ModalLayout } from './ui/ModalLayout';
-import { FormInput, FormSelectWithColor } from './ui';
+import { DateRangePicker, FormInput, FormSelector } from './ui';
 
 type TaskFormValues = {
     taskName: string;
@@ -11,6 +11,39 @@ type TaskFormValues = {
     priority: string;
     priorityColor: string;
 };
+const resolver: Resolver<TaskFormValues> = async (values) => {
+    const errors: Record<string, { type: string; message: string }> = {};
+
+    if (!values.taskName?.trim()) {
+        errors.taskName = {
+            type: 'required',
+            message: 'Название задачи обязательно',
+        };
+    }
+
+    if (!values.startedDate) {
+        errors.startedDate = {
+            type: 'required',
+            message: 'Дата начала обязательна',
+        };
+    }
+
+    if (
+        values.deadline &&
+        values.startedDate &&
+        values.deadline < values.startedDate
+    ) {
+        errors.deadline = {
+            type: 'invalidDate',
+            message: 'Дедлайн не может быть раньше даты начала',
+        };
+    }
+
+    return {
+        values: Object.keys(errors).length === 0 ? values : {},
+        errors,
+    };
+};
 
 export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
     const {
@@ -18,7 +51,7 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
         handleSubmit,
         formState: { errors },
     } = useForm<TaskFormValues>({
-        // Ваш resolver для задач
+        resolver,
     });
 
     return (
@@ -33,25 +66,33 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
                 error={errors.taskName}
                 {...register('taskName')}
             />
-
-            <FormSelectWithColor
-                selectLabel="Статус"
-                colorLabel="Цвет статуса"
-                selectProps={{
-                    ...register('statusName'),
-                    children: (
-                        <>
-                            <option value="">Выберите статус</option>
-                            <option value="В работе">В работе</option>
-                            <option value="На паузе">На паузе</option>
-                            <option value="Завершено">Завершено</option>
-                        </>
-                    ),
-                }}
-                colorProps={register('statusColor')}
+            <DateRangePicker
+                startName="startedDate"
+                endName="deadline"
+                labels={{ start: 'Дата начала', end: 'Дедлайн' }}
+                required
             />
 
-            {/* Аналогично для остальных полей */}
+            <div className="flex items-center gap-5">
+                <FormSelector
+                    label="Статус"
+                    {...register('statusName', { required: true })}
+                    error={errors.statusName}
+                    id="country-select"
+                >
+                    <option value="ru">1</option>
+                    <option value="kz">2</option>
+                </FormSelector>
+                <FormSelector
+                    label="Приоритет"
+                    {...register('priority', { required: true })}
+                    error={errors.statusName}
+                    id="country-select"
+                >
+                    <option value="ru">1</option>
+                    <option value="kz">2</option>
+                </FormSelector>
+            </div>
         </ModalLayout>
     );
 };

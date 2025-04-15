@@ -1,3 +1,5 @@
+import { FieldError } from "react-hook-form";
+
 export const FormInput = ({
     label,
     required,
@@ -6,9 +8,9 @@ export const FormInput = ({
 }: {
     label: string;
     required?: boolean;
-    error?: { message: string };
+    error?: FieldError | undefined;
 } & React.InputHTMLAttributes<HTMLInputElement>) => (
-    <div className="form-control flex flex-col">
+    <div className="form-control flex w-full flex-col">
         <label className="label">
             <span className="label-text">
                 {label}

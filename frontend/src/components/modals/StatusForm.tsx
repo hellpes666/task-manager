@@ -15,28 +15,18 @@ export const StatusForm = ({ toggleModal }: { toggleModal: () => void }) => {
             toggleModal={toggleModal}
             onSubmit={handleSubmit((data) => console.log(data))}
         >
-            <FormInput
-                label="Название статуса"
-                required
-                {...register('statusName')}
-            />
+            <div className="flex items-center gap-5">
+                <FormInput
+                    label="Название статуса"
+                    required
+                    {...register('statusName')}
+                />
 
-            <FormSelectWithColor
-                selectLabel="Уровень статуса"
-                colorLabel="Цвет статуса"
-                selectProps={{
-                    ...register('statusName'),
-                    children: (
-                        <>
-                            <option value="">Выберите уровень</option>
-                            <option value="Высокий">Высокий</option>
-                            <option value="Средний">Средний</option>
-                            <option value="Низкий">Низкий</option>
-                        </>
-                    ),
-                }}
-                colorProps={register('statusColor')}
-            />
+                <FormSelectWithColor
+                    colorLabel="Цвет статуса"
+                    colorProps={register('statusColor')}
+                />
+            </div>
         </ModalLayout>
     );
 };

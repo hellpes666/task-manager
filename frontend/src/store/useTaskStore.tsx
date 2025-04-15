@@ -1,5 +1,11 @@
 import { create } from 'zustand';
-import { ITask, ITaskPriority, ITaskStatus } from '../entity/Task.entity';
+import {
+    ITask,
+    ITaskPriority,
+    ITasksData,
+    ITasksResponse,
+    ITaskStatus,
+} from '../entity/Task.entity';
 import { axiosInstance, catchBlock } from '../lib';
 
 const TASK_BASE_URL = '/tasks';
@@ -7,12 +13,8 @@ const TASK_PRIORITIES = TASK_BASE_URL + '/task-priorities';
 const TASK_STATUSES = TASK_BASE_URL + '/task-statuses';
 
 interface ITaskState {
-    activeColumns: Array<{
-        columnName: string;
-        columnId: number | string;
-        activeTasks: Array<ITask> | null;
-    }> | null;
-    backlog: Array<ITask> | null;
+    activeTasks: ITasksData[] | null;
+    backlog: ITasksData | null;
 
     isLoadingAllTasks: boolean;
     isCreatingNewTask: boolean;
@@ -37,9 +39,8 @@ interface ITaskState {
 }
 
 export const useTaskStore = create<ITaskState>((set) => ({
-    activeColumns: null,
+    activeTasks: null,
     backlog: null,
-
     isLoadingAllTasks: false,
     isCreatingNewTask: false,
 
@@ -50,14 +51,17 @@ export const useTaskStore = create<ITaskState>((set) => ({
     isCreatingNewPriority: false,
 
     getAllTasks: async () => {
-		set({isLoadingAllTasks: true})
+        set({ isLoadingAllTasks: true });
 
-		try {
-			const res = await axiosInstance.get(TASK_BASE_URL)
-		} catch (error) {
-			catchBlock(error, 'getAllTasks')
-		}
-	},
+        try {
+            const res: ITasksResponse = await axiosInstance.get(TASK_BASE_URL);
+            set({ activeTasks: res.data.data, backlog: res.data.backlogData });
+        } catch (error) {
+            catchBlock(error, 'getAllTasks');
+        } finally {
+            set({ isLoadingAllTasks: false });
+        }
+    },
     createNewTask: (data) => {},
     deleteTask: (statusId) => {},
 

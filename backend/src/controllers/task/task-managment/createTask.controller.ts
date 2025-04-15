@@ -1,4 +1,4 @@
-import { Response, Request } from "express";
+import { Response } from "express";
 import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
 import { Task, TaskPriority, TaskStatus, User } from "../../../models";
@@ -12,7 +12,7 @@ export type CreateTaskRequestBody = {
 	priorityId: string;
 	description: string;
 	creatorId: string;
-	assignedToIds: Array<string>;
+	// assignedToIds: Array<string>;
 	daysLeft: string;
 };
 export const createTask = async (req: ICustomRequest, res: Response) => {
@@ -33,19 +33,29 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 				_id: taskData.priorityId,
 			});
 
-			let assignedEmployes: string[] = [];
+			// const invalidUsers = (
+			// 	await Promise.all(
+			// 		taskData.assignedToIds.map((id) => User.exists({ _id: id }))
+			// 	)
+			// ).some((exists) => !exists);
 
-			for (let userId of taskData.assignedToIds) {
-				const assignedUser = await User.findById({
-					_id: userId,
-				});
+			// if (invalidUsers) {
+			// 	res.status(400).json({
+			// 		message:
+			// 			"Один или несколько назначенных пользователей не найдены",
+			// 	});
+			// 	return;
+			// }
 
-				assignedEmployes.push(
-					assignedUser!.name + " " + assignedUser!.lastName
-				);
-			}
+			// const assignedEmployes = await Promise.all(
+			// 	taskData.assignedToIds.map(async (userId) => {
+			// 		const user = await User.findById(userId);
+			// 		return user
+			// 			? `${user.name} ${user.lastName}`
+			// 			: "Неизвестный пользователь";
+			// 	})
+			// );
 
-			//TODO переделать модели: Priority, Status - в последние добавить цвет
 			await Task.create({
 				title: taskData.title,
 				statusId: taskData.statusId,
@@ -54,7 +64,7 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 				priorityId: taskData.priorityId,
 				description: taskData.description,
 				creatorId: currentUser?._id,
-				assignedToEmployes: assignedEmployes,
+				// assignedToEmployes: taskData.assignedToIds,
 			});
 
 			res.status(200).send({
@@ -67,7 +77,8 @@ export const createTask = async (req: ICustomRequest, res: Response) => {
 					priority: currentPriority,
 					description: taskData.description,
 					creator: currentUser?.name + " " + currentUser?.lastName,
-					assignedToEmployes: assignedEmployes,
+					// assignedToIds: taskData.assignedToIds,
+					// assignedEmployes,
 				},
 			});
 		}

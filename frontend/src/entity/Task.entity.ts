@@ -1,23 +1,40 @@
 export interface ITask {
-	_id:  string
+    _id: string;
     title: string;
-    statusId: string;
+    status: { _id: string; name: string };
     startedDate: Date;
     deadline: Date;
-    priorityId: string;
+    priority: { _id: string; name: string };
     description: string;
-    creatorId: string;
-    assignedToIds: Array<string>; // user
+    creator: { _id: string; name: string; lastName: string; email: string };
+    // assignedToIds: Array<string>; // user
+}
+
+export type Task = Omit<ITask, 'status'>;
+
+export interface ITasksData {
+    status: string;
+    count: number;
+    tasks: Array<Task>;
+    meta: { statusId: string; color: string };
+}
+
+export interface ITasksResponse {
+    message: string;
+    data: {
+        data: Array<ITasksData>;
+        backlogData: ITasksData;
+    };
 }
 
 export interface ITaskPriority {
-	_id: string
+    _id: string;
     name: string;
     color: string;
 }
 
 export interface ITaskStatus {
-	_id: string
+    _id: string;
     name: string;
     color: string;
 }
