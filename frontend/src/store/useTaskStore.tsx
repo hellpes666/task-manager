@@ -7,6 +7,7 @@ import {
     ITaskStatus,
 } from '../entity/Task.entity';
 import { axiosInstance, catchBlock } from '../lib';
+import toast from 'react-hot-toast';
 
 const TASK_BASE_URL = '/tasks';
 const TASK_PRIORITIES = TASK_BASE_URL + '/task-priorities';
@@ -67,7 +68,16 @@ export const useTaskStore = create<ITaskState>((set) => ({
             set({ isLoadingAllTasks: false });
         }
     },
-    createNewTask: (data) => {},
+    createNewTask: (data) => {
+        set({ isCreatingNewTask: true });
+        try {
+            axiosInstance.post(TASK_BASE_URL, data);
+        } catch (error) {
+            catchBlock(error, 'createNewTask');
+        } finally {
+            set({ isCreatingNewTask: false });
+        }
+    },
     deleteTask: (statusId) => {},
 
     getAllStatuses: async () => {
@@ -77,14 +87,23 @@ export const useTaskStore = create<ITaskState>((set) => ({
             const res: { data: { data: Array<ITaskStatus> } } =
                 await axiosInstance.get(TASK_STATUSES);
             set({ statuses: res.data.data });
-            console.log(res.data);
         } catch (error) {
             catchBlock(error, 'getAllStatuses');
         } finally {
             set({ isLoadingAllStatuses: false });
         }
     },
-    createNewStatus: (data) => {},
+    createNewStatus: async (data) => {
+        set({ isCreatingNewStatus: true });
+        try {
+            const res = await axiosInstance.post(TASK_STATUSES, data);
+            toast.success(res.data.message);
+        } catch (error) {
+            catchBlock(error, 'createNewStatus');
+        } finally {
+            set({ isCreatingNewStatus: false });
+        }
+    },
     deleteStatus: (statusId) => {},
 
     getAllPriorities: async () => {
@@ -100,6 +119,17 @@ export const useTaskStore = create<ITaskState>((set) => ({
             set({ isLoadingAllPriorities: false });
         }
     },
-    createNewPriority: (data) => {},
+    createNewPriority: async (data) => {
+        set({ isCreatingNewPriority: true });
+        try {
+            const res = await axiosInstance.post(TASK_PRIORITIES, data);
+            toast.success(res.data.message);
+        } catch (error) {
+            console.log(error);
+            catchBlock(error, 'createNewPriority');
+        } finally {
+            set({ isCreatingNewPriority: false });
+        }
+    },
     deletePriority: (priorityId) => {},
 }));

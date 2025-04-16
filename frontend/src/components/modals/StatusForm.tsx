@@ -1,32 +1,40 @@
 import { useForm } from 'react-hook-form';
 import { ModalLayout, FormSelectWithColor, FormInput } from './ui';
-
-type StatusFormValues = {
-    statusName: string;
-    statusColor: string;
-};
+import { useTaskStore } from '../../store/useTaskStore';
+import { Loader } from 'lucide-react';
+import { ITaskStatus } from '../../entity/Task.entity';
 
 export const StatusForm = ({ toggleModal }: { toggleModal: () => void }) => {
-    const { register, handleSubmit } = useForm<StatusFormValues>();
+    const { register, handleSubmit } = useForm<ITaskStatus>();
+    const { createNewStatus, isCreatingNewStatus } = useTaskStore();
 
     return (
         <ModalLayout
             title="Добавить статус"
             toggleModal={toggleModal}
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit((data) => {
+                createNewStatus(data);
+                toggleModal();
+            })}
         >
-            <div className="flex items-center gap-5">
-                <FormInput
-                    label="Название статуса"
-                    required
-                    {...register('statusName')}
-                />
+            {isCreatingNewStatus ? (
+                <div className="flex h-full items-center justify-center">
+                    <Loader className="size-10 animate-spin" />
+                </div>
+            ) : (
+                <div className="flex items-center gap-5">
+                    <FormInput
+                        label="Название статуса"
+                        required
+                        {...register('name')}
+                    />
 
-                <FormSelectWithColor
-                    colorLabel="Цвет статуса"
-                    colorProps={register('statusColor')}
-                />
-            </div>
+                    <FormSelectWithColor
+                        colorLabel="Цвет статуса"
+                        colorProps={register('color')}
+                    />
+                </div>
+            )}
         </ModalLayout>
     );
 };

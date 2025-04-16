@@ -33,8 +33,15 @@ export const createTaskStatus = async (
 			});
 			return;
 		}
-	} catch (error) {
+	} catch (error: any) {
+		if (error.code === 11000 && error.keyPattern?.name) {
+			res.status(422).json({
+				message: "Статус с таким названием уже существует.",
+			});
+			return;
+		}
 		handleError(error, errorPath("createTaskStatus.controller.ts"));
+
 		res.status(500).json({
 			message: "Произошла ошибка. Попробуйте снова",
 		});

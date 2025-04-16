@@ -4,20 +4,12 @@ import { DateRangePicker, FormInput, FormSelector } from './ui';
 import { useTaskStore } from '../../store/useTaskStore';
 import { useEffect } from 'react';
 import { Loader } from 'lucide-react';
+import { ITask } from '../../entity/Task.entity';
 
-type TaskFormValues = {
-    taskName: string;
-    statusName: string;
-    statusColor: string;
-    startedDate: Date;
-    deadline: Date;
-    priority: string;
-    priorityColor: string;
-};
-const resolver: Resolver<TaskFormValues> = async (values) => {
+const resolver: Resolver<ITask> = async (values) => {
     const errors: Record<string, { type: string; message: string }> = {};
 
-    if (!values.taskName?.trim()) {
+    if (!values.title?.trim()) {
         errors.taskName = {
             type: 'required',
             message: 'Название задачи обязательно',
@@ -53,7 +45,7 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<TaskFormValues>({
+    } = useForm<ITask>({
         resolver,
     });
 
@@ -64,6 +56,8 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
         getAllStatuses,
         isLoadingAllPriorities,
         isLoadingAllStatuses,
+        isCreatingNewTask,
+        createNewTask,
     } = useTaskStore();
 
     useEffect(() => {
@@ -75,9 +69,15 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
         <ModalLayout
             title="Добавить задачу"
             toggleModal={toggleModal}
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit(async (data) => {
+                console.log('Form data:', data);
+                // await createNewTask(data);
+                toggleModal();
+            })}
         >
-            {isLoadingAllStatuses || isLoadingAllPriorities ? (
+            {isLoadingAllStatuses ||
+            isLoadingAllPriorities ||
+            isCreatingNewTask ? (
                 <div className="flex h-full items-center justify-center">
                     <Loader className="size-10 animate-spin" />
                 </div>
@@ -86,21 +86,20 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
                     <FormInput
                         label="Название задачи"
                         required
-                        error={errors.taskName}
-                        {...register('taskName')}
+                        error={errors.title}
+                        {...register('title')}
                     />
                     <DateRangePicker
                         startName="startedDate"
                         endName="deadline"
                         labels={{ start: 'Дата начала', end: 'Дедлайн' }}
-                        required
                     />
 
                     <div className="flex items-center gap-5">
                         <FormSelector
                             label="Статус"
-                            {...register('statusName', { required: true })}
-                            error={errors.statusName}
+                            {...register('status.name', { required: true })}
+                            error={errors.status?.name}
                             id="country-select"
                         >
                             {statuses?.map((item) => (
@@ -112,7 +111,7 @@ export const TaskForm = ({ toggleModal }: { toggleModal: () => void }) => {
                         <FormSelector
                             label="Приоритет"
                             {...register('priority', { required: true })}
-                            error={errors.statusName}
+                            error={errors.priority?.name}
                             id="country-select"
                         >
                             {priorities?.map((item) => (

@@ -23,8 +23,17 @@ export const createTaskPriority = async (
 			});
 			return;
 		}
-	} catch (error) {
+	} catch (error: any) {
+		if (error.code === 11000 && error.keyPattern?.name) {
+			res.status(422).json({
+				message: "Приоритет с таким названием уже существует.",
+			});
+
+			return;
+		}
+
 		handleError(error, errorPath("createTaskPriority.controller.ts"));
+
 		res.status(500).json({
 			message: "Произошла ошибка. Попробуйте снова",
 		});

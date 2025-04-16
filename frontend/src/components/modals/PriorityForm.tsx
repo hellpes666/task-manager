@@ -1,34 +1,41 @@
 import { useForm } from 'react-hook-form';
-import { FormInput, FormSelectWithColor, ModalLayout } from './ui';
-
-type PriorityFormValues = {
-    priorityName: string;
-    priorityColor: string;
-};
+import { FormInput, ModalLayout } from './ui';
+import { useTaskStore } from '../../store/useTaskStore';
+import { ITaskPriority } from '../../entity/Task.entity';
+import { Loader } from 'lucide-react';
 
 export const PriorityForm = ({ toggleModal }: { toggleModal: () => void }) => {
-    const { register, handleSubmit } = useForm<PriorityFormValues>();
+    const { register, handleSubmit } = useForm<ITaskPriority>();
 
-	
+    const { createNewPriority, isCreatingNewPriority } = useTaskStore();
 
     return (
         <ModalLayout
             title="Добавить приоритет"
             toggleModal={toggleModal}
-            onSubmit={handleSubmit((data) => console.log(data))}
+            onSubmit={handleSubmit((data) => {
+                createNewPriority(data);
+                toggleModal();
+            })}
         >
-            <div className="flex items-center gap-5">
-                <FormInput
-                    label="Название приоритета"
-                    required
-                    {...register('priorityName')}
-                />
+            {isCreatingNewPriority ? (
+                <div className="flex h-full items-center justify-center">
+                    <Loader className="size-10 animate-spin" />
+                </div>
+            ) : (
+                <div className="flex items-center gap-5">
+                    <FormInput
+                        label="Название приоритета"
+                        required
+                        {...register('name')}
+                    />
 
-                {/* <FormSelectWithColor
+                    {/* <FormSelectWithColor
                     colorLabel="Цвет приоритета"
                     colorProps={register('priorityColor')}
                 /> */}
-            </div>
+                </div>
+            )}
         </ModalLayout>
     );
 };

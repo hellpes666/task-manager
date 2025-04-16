@@ -8,7 +8,7 @@ type TaskPriorityModel = Model<ITaskPriority>;
 
 const TaskPrioritySchema = new Schema<ITaskPriority, TaskPriorityModel>(
 	{
-		name: { type: String, required: true },
+		name: { type: String, required: true, unique: true },
 		color: {type: String, default: '#666666'}
 	},
 	{ timestamps: true }

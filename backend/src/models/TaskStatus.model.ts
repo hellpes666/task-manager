@@ -8,8 +8,8 @@ type TaskStatusModel = Model<ITaskStatus>;
 
 const taskStatusSchema = new Schema<ITaskStatus, TaskStatusModel>(
 	{
-		name: { type: String, required: true },
-		color: { type: String, default: "#666666"},
+		name: { type: String, required: true, unique: true },
+		color: { type: String, default: "#666666" },
 	},
 	{ timestamps: true }
 );
