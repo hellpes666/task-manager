@@ -20,14 +20,14 @@ const taskSchema = new Schema<ITask, TaskModel>(
 			ref: "TaskStatus",
 			required: true,
 		},
-		startedDate: { type: Date, required: true },
-		deadline: { type: Date, required: true },
+		startedDate: { type: Date },
+		deadline: { type: Date },
 		priorityId: {
 			type: Schema.Types.ObjectId,
 			ref: "TaskPriority",
 			required: true,
 		},
-		description: { type: String, required: true },
+		description: { type: String },
 		creatorId: {
 			type: Schema.Types.ObjectId,
 			ref: "User",

@@ -37,7 +37,7 @@ export const DateRangePicker = ({
                 </label>
                 <input
                     type="date"
-                    {...register(startName, {
+                    {...register('startedDate', {
                         required: required && 'Обязательное поле',
                         // onChange: () => trigger(endName),
                     })}
@@ -65,7 +65,7 @@ export const DateRangePicker = ({
                 </label>
                 <input
                     type="date"
-                    {...register(endName, {
+                    {...register('deadline', {
                         required: required && 'Обязательное поле',
                         validate: (value) =>
                             !startDate ||

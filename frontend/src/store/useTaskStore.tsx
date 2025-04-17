@@ -30,7 +30,12 @@ interface ITaskState {
     isCreatingNewPriority: boolean;
 
     getAllTasks: () => void;
-    createNewTask: (data: ITask) => void;
+    // createNewTask: (data: ITask) => void;
+    createNewTask: (data: {
+        title: string;
+        statusId: string;
+        priorityId: string;
+    }) => void;
     deleteTask: (taskId: Pick<ITask, '_id'>) => void;
 
     getAllStatuses: () => void;
@@ -42,7 +47,7 @@ interface ITaskState {
     deletePriority: (priorityId: Pick<ITaskPriority, '_id'>) => void;
 }
 
-export const useTaskStore = create<ITaskState>((set) => ({
+export const useTaskStore = create<ITaskState>((set, get) => ({
     statuses: null,
     priorities: null,
     activeTasks: null,
@@ -68,10 +73,17 @@ export const useTaskStore = create<ITaskState>((set) => ({
             set({ isLoadingAllTasks: false });
         }
     },
-    createNewTask: (data) => {
+    createNewTask: async (data) => {
         set({ isCreatingNewTask: true });
         try {
-            axiosInstance.post(TASK_BASE_URL, data);
+            const { _id } = (await axiosInstance.get('/auth/user')).data;
+            await axiosInstance.post(TASK_BASE_URL, {
+                priorityId: data.priorityId,
+                statusId: data.statusId,
+                title: data.title,
+                creatorId: _id,
+            });
+            get().getAllTasks();
         } catch (error) {
             catchBlock(error, 'createNewTask');
         } finally {
