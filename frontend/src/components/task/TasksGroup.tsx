@@ -3,13 +3,8 @@ import { Title } from '../../ui';
 
 import { ITasksData } from '../../entity/Task.entity';
 import { ActiveTask } from '.';
-import { useDrawerStore } from '../../store/useDrawerStore';
-import { Drawer } from '../Drawer/Drawer';
-import { TaskDetails } from '../Drawer/TaskDetails';
 
 export const TasksGroup: React.FC<ITasksData> = (props) => {
-    const { isOpen, closeDrawer, taskDescription, isTaskDataLoading } =
-        useDrawerStore();
     return (
         <>
             <div
@@ -40,13 +35,6 @@ export const TasksGroup: React.FC<ITasksData> = (props) => {
                     )}
                 </div>
             </div>
-
-            <Drawer isOpen={isOpen} onClose={closeDrawer}>
-                <TaskDetails
-                    data={taskDescription}
-                    isLoading={isTaskDataLoading}
-                />
-            </Drawer>
         </>
     );
 };
