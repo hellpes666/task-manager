@@ -1,3 +1,10 @@
+export interface IUser {
+    _id: string;
+    name: string;
+    lastName: string;
+    email: string;
+}
+
 export interface ITask {
     _id: string;
     title: string;
@@ -6,8 +13,8 @@ export interface ITask {
     deadline: Date;
     priority: { _id: string; name: string };
     description: string;
-    creator: { _id: string; name: string; lastName: string; email: string };
-    // assignedToIds: Array<string>; // user
+    creator: IUser;
+    assignedToIds: Array<IUser>;
 }
 
 export type Task = Omit<ITask, 'status'>;

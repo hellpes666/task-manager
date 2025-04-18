@@ -19,7 +19,11 @@ import {
 	TASK_STATUSES_END_POINT,
 	TASK_MANAGMENT_END_POINT,
 } from "./constants";
-import { createTask, getAllTasks } from "../controllers/task/task-managment";
+import {
+	createTask,
+	getAllTasks,
+	getTask,
+} from "../controllers/task/task-managment";
 
 export const taskRouter: Router = express.Router();
 
@@ -56,4 +60,5 @@ taskRouter.delete(
 taskRouter.delete(TASK_STATUSES_END_POINT, protectAccess, deleteTaskStatuses);
 
 taskRouter.post(TASK_MANAGMENT_END_POINT, protectAccess, createTask);
+taskRouter.get(TASK_MANAGMENT_END_POINT + '/:id', protectAccess, getTask);
 taskRouter.get(TASK_MANAGMENT_END_POINT, protectAccess, getAllTasks);

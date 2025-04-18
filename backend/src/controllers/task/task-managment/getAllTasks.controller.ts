@@ -1,17 +1,20 @@
 import { Request, Response } from "express";
 import { handleError } from "../../../lib";
 import { errorPath } from "../../errorPath";
-import { Task } from "../../../models";
+import { Task, TaskStatus } from "../../../models";
 
 export const getAllTasks = async (req: Request, res: Response) => {
 	try {
-		const data = await Task.find({})
+		const tasks = await Task.find({})
 			.populate("statusId", "name color")
 			.populate("priorityId", "name")
 			.populate("creatorId", "name lastName email")
+			.populate("assignedToIds", "name lastName")
 			.lean();
 
-		const transformedData = data.map((task) => {
+		const allStatuses = await TaskStatus.find().lean();
+
+		const transformedData = tasks.map((task) => {
 			const { statusId, priorityId, creatorId, ...rest } = task;
 			return {
 				...rest,
@@ -25,6 +28,11 @@ export const getAllTasks = async (req: Request, res: Response) => {
 			(acc, task) => {
 				//@ts-ignore
 				const statusName = task.status?.name?.trim() || "Бэклог";
+				//@ts-ignore
+				const statusColor = task.status?.color ?? "#666666";
+				//@ts-ignore
+				const statusId = task.status?._id;
+
 				const { status, ...taskWithoutStatus } = task;
 
 				if (!acc[statusName]) {
@@ -32,10 +40,8 @@ export const getAllTasks = async (req: Request, res: Response) => {
 						count: 0,
 						tasks: [],
 						meta: {
-							//@ts-ignore
-							statusId: task.status?._id,
-							//@ts-ignore
-							color: task.status?.color,
+							statusId: statusId?.toString(),
+							color: statusColor,
 						},
 					};
 				}
@@ -59,6 +65,20 @@ export const getAllTasks = async (req: Request, res: Response) => {
 			>
 		);
 
+		allStatuses.forEach((status) => {
+			const statusName = status.name.trim();
+			if (!groupedData[statusName]) {
+				groupedData[statusName] = {
+					count: 0,
+					tasks: [],
+					meta: {
+						statusId: status._id.toString(),
+						color: status.color ?? "#666666",
+					},
+				};
+			}
+		});
+
 		const result = Object.entries(groupedData).map(([status, group]) => ({
 			status,
 			count: group.count,
@@ -81,7 +101,12 @@ export const getAllTasks = async (req: Request, res: Response) => {
 			data: dataResult,
 			backlogData: backlogResult,
 		});
+		return;
 	} catch (error) {
 		handleError(error, errorPath("getAllTasks.controller.ts"));
+		res.status(500).json({
+			message: "Произошла ошибка при получении задач",
+		});
+		return;
 	}
 };

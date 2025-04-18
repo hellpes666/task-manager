@@ -109,6 +109,7 @@ export const useTaskStore = create<ITaskState>((set, get) => ({
         set({ isCreatingNewStatus: true });
         try {
             const res = await axiosInstance.post(TASK_STATUSES, data);
+            get().getAllTasks();
             toast.success(res.data.message);
         } catch (error) {
             catchBlock(error, 'createNewStatus');

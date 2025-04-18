@@ -18,14 +18,14 @@ const taskSchema = new Schema<ITask, TaskModel>(
 		statusId: {
 			type: Schema.Types.ObjectId,
 			ref: "TaskStatus",
-			required: true,
+			default: () =>
+				new mongoose.Types.ObjectId("68024d958e88d0c2102d173a"),
 		},
 		startedDate: { type: Date },
 		deadline: { type: Date },
 		priorityId: {
 			type: Schema.Types.ObjectId,
 			ref: "TaskPriority",
-			required: true,
 		},
 		description: { type: String },
 		creatorId: {

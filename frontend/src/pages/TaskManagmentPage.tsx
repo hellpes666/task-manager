@@ -17,11 +17,14 @@ export const TaskManagmentPage = () => {
     const { isOpenModal: isOpenStatusModel, toggleModal: toggleStatusModel } =
         useOpenModal();
 
-    const { getAllTasks, isLoadingAllTasks } = useTaskStore();
+    const { getAllTasks, isLoadingAllTasks, getAllStatuses, getAllPriorities } =
+        useTaskStore();
 
     useEffect(() => {
         getAllTasks();
-    }, [getAllTasks]);
+        getAllStatuses();
+        getAllPriorities();
+    }, [getAllTasks, getAllStatuses, getAllPriorities]);
 
     if (isLoadingAllTasks) {
         return (
