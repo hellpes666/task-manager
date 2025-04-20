@@ -22,6 +22,7 @@ interface ITaskState {
 
     isLoadingAllTasks: boolean;
     isCreatingNewTask: boolean;
+    isLoadingUpdatingTaskData: boolean;
 
     isLoadingAllStatuses: boolean;
     isCreatingNewStatus: boolean;
@@ -30,7 +31,7 @@ interface ITaskState {
     isCreatingNewPriority: boolean;
 
     getAllTasks: () => void;
-    // createNewTask: (data: ITask) => void;
+    updateTaskData: (data: { taskId: string; columnId: string }) => void;
     createNewTask: (data: {
         title: string;
         statusId: string;
@@ -54,6 +55,7 @@ export const useTaskStore = create<ITaskState>((set, get) => ({
     backlog: null,
     isLoadingAllTasks: false,
     isCreatingNewTask: false,
+    isLoadingUpdatingTaskData: false,
 
     isLoadingAllStatuses: false,
     isCreatingNewStatus: false,
@@ -88,6 +90,20 @@ export const useTaskStore = create<ITaskState>((set, get) => ({
             catchBlock(error, 'createNewTask');
         } finally {
             set({ isCreatingNewTask: false });
+        }
+    },
+    updateTaskData: async (data) => {
+        set({ isLoadingUpdatingTaskData: true });
+
+        try {
+            await axiosInstance.patch(TASK_BASE_URL + `/${data.taskId}`, {
+                statusId: data.columnId,
+            });
+            get().getAllTasks();
+        } catch (error) {
+            catchBlock(error, 'updateTaskData');
+        } finally {
+            set({ isLoadingUpdatingTaskData: true });
         }
     },
     deleteTask: (statusId) => {},

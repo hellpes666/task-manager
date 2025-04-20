@@ -6,6 +6,7 @@ import { useOpenModal } from '../hooks';
 import { useTaskStore } from '../store/useTaskStore';
 import { Title } from '../ui';
 import { Loader } from 'lucide-react';
+import { TaskDrawer } from '../components/Drawer/TaskDrawer';
 
 export const TaskManagmentPage = () => {
     const { isOpenModal: isOpenTaskModel, toggleModal: toggleTaskModel } =
@@ -76,6 +77,7 @@ export const TaskManagmentPage = () => {
             {isOpenStatusModel && (
                 <StatusForm toggleModal={toggleStatusModel} />
             )}
+            <TaskDrawer />
         </div>
     );
 };

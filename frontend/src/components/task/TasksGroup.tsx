@@ -3,8 +3,14 @@ import { Title } from '../../ui';
 
 import { ITasksData } from '../../entity/Task.entity';
 import { ActiveTask } from '.';
+import { useDroppable } from '@dnd-kit/core';
 
-export const TasksGroup: React.FC<ITasksData> = (props) => {
+export const TasksGroup: React.FC<
+    ITasksData & { activeTaskId: string | null }
+> = (props) => {
+    const { setNodeRef } = useDroppable({
+        id: props.meta.statusId,
+    });
     return (
         <>
             <div
@@ -12,6 +18,7 @@ export const TasksGroup: React.FC<ITasksData> = (props) => {
                 style={{
                     borderColor: props.meta.color || 'var(--accent-color)',
                 }}
+                ref={setNodeRef}
             >
                 <Title
                     title={props.status ?? 'Задачи'}
@@ -19,10 +26,14 @@ export const TasksGroup: React.FC<ITasksData> = (props) => {
                     className="text-base-300 font-medium"
                 />
                 <div className="mt-1 w-full rounded-full border-[1px] border-[#666]/20" />
-                <div className="mt-5 flex max-h-[90%] flex-col items-center justify-center gap-5 overflow-y-auto">
+                <div className="mt-5 flex max-h-[90%] flex-col items-center justify-center gap-5">
                     {props.tasks ? (
-                        props.tasks.map((props) => (
-                            <ActiveTask {...props} key={props._id} />
+                        props.tasks.map((task) => (
+                            <ActiveTask
+                                {...task}
+                                key={task._id}
+                                isDragging={props.activeTaskId === task._id}
+                            />
                         ))
                     ) : (
                         <>
