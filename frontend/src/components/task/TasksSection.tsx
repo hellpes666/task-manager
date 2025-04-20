@@ -79,12 +79,13 @@ export const TasksSection = () => {
                         <Loader className="size-10 animate-spin" />
                     </div>
                 ) : activeTasks && activeTasks.length > 0 ? (
-                    activeTasks.map((props) => (
-                        <TasksGroup
-                            {...props}
-                            key={props.meta.statusId}
-                            activeTaskId={activeTaskId}
-                        />
+                    activeTasks.map((props, i) => (
+                            <TasksGroup
+                                {...props}
+                                key={props.meta.statusId}
+                                activeTaskId={activeTaskId}
+								currentIndex={i}
+                            />
                     ))
                 ) : (
                     <Title

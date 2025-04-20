@@ -3,11 +3,11 @@ import { Task } from '../../entity/Task.entity';
 import { useDrawerStore } from '../../store/useDrawerStore';
 import { useDraggable } from '@dnd-kit/core';
 import { CSS } from '@dnd-kit/utilities';
+import { motion } from 'framer-motion';
 
-export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
-    isDragging,
-    ...props
-}) => {
+export const ActiveTask: React.FC<
+    Task & { isDragging?: boolean; currentIndex: number }
+> = ({ isDragging, currentIndex, ...props }) => {
     const { openDrawer } = useDrawerStore();
 
     const { attributes, listeners, setNodeRef, transform } = useDraggable({
@@ -18,7 +18,7 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
     });
 
     return (
-        <div
+        <motion.div
             className={`bg-base-100 shadow-base-100/60 mx-auto flex w-full cursor-grab items-center gap-1 rounded-2xl p-3 shadow-xl transition-transform`}
             onClick={() => {
                 if (!isDragging) {
@@ -34,6 +34,13 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
                 transition: 'opacity 0.2s ease',
                 willChange: 'transform',
             }}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{
+                delay: (currentIndex + 1) * 0.5,
+                duration: 0.4,
+                ease: 'easeOut',
+            }}
         >
             <div className="flex w-full flex-col items-center gap-3">
                 <div className="flex w-full items-center justify-between">
@@ -42,7 +49,6 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
                             className="size-6 rounded-full border-2 border-dashed"
                             // style={{
                             //     borderColor: priorityColor || '#0a0a0a',
-                            //     borderColor: '#0a0a0a',
                             // }}
                         />
                         <h3 className="text-primary-content truncate font-bold">
@@ -53,7 +59,6 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
                         className="size-6"
                         viewBox="0 0 24 24"
                         xmlns="http://www.w3.org/2000/svg"
-                        id="fi_3793594"
                         fill="#666"
                     >
                         <circle cx="8" cy="4" r="2"></circle>
@@ -73,6 +78,6 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
                     </div>
                 )}
             </div>
-        </div>
+        </motion.div>
     );
 };
