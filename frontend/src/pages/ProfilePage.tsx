@@ -1,33 +1,83 @@
 import { UserRound } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
+import { motion } from 'framer-motion';
 
 export const ProfilePage = () => {
     const { authUser, logout } = useAuthStore();
+
+    const fadeInUp = (delay = 0) => ({
+        initial: { opacity: 0, y: 40 },
+        animate: { opacity: 1, y: 0 },
+        transition: {
+            delay,
+            duration: 0.6,
+            ease: [0.22, 1, 0.36, 1],
+        },
+    });
+
     return (
-        <div className="from-primary/10 via-secondary/5 to-accent/5 min-h-[90vh] rounded-3xl bg-gradient-to-br px-4 py-4">
-            <div className="mx-auto max-w-2xl animate-[fadeInUp_1.3s_cubic-bezier(0.22,1,0.36,1)_both]">
-                <div className="bg-base-100 rounded-2xl shadow-xl transition-all duration-300 hover:shadow-2xl">
-                    <div className="from-primary to-secondary relative h-32 rounded-t-2xl bg-gradient-to-r">
-                        <div className="absolute -bottom-16 left-1/2 -translate-x-1/2">
-                            <div className="ring-primary/20 ring-offset-base-100 rounded-full ring-4 ring-offset-4 transition-transform duration-300 hover:scale-105">
+        <motion.div
+            className="from-primary/10 via-secondary/5 to-accent/5 min-h-[90vh] rounded-3xl bg-gradient-to-br px-4 py-4"
+            {...fadeInUp(0)}
+            style={{ willChange: 'opacity, transform' }}
+        >
+            <motion.div
+                className="mx-auto max-w-2xl"
+                {...fadeInUp(0.1)}
+                style={{ willChange: 'opacity, transform' }}
+            >
+                <motion.div
+                    className="bg-base-100 rounded-2xl shadow-xl"
+                    transition={{ type: 'spring', stiffness: 70 }}
+                    style={{ willChange: 'transform, box-shadow' }}
+                >
+                    <motion.div
+                        className="from-primary to-secondary relative h-32 rounded-t-2xl bg-gradient-to-r"
+                        {...fadeInUp(0.2)}
+                        style={{ willChange: 'opacity, transform' }}
+                    >
+                        <motion.div
+                            className="absolute -bottom-16 left-1/2 -translate-x-1/2"
+                            {...fadeInUp(0.4)}
+                            style={{ willChange: 'opacity, transform' }}
+                        >
+                            <motion.div
+                                className="ring-primary/20 ring-offset-base-100 rounded-full ring-4 ring-offset-4"
+                                whileHover={{ scale: 1.05 }}
+                                transition={{ type: 'spring' }}
+                                style={{ willChange: 'transform' }}
+                            >
                                 <UserRound
                                     className="text-primary bg-base-100 rounded-full p-3"
                                     size={100}
                                 />
-                            </div>
-                        </div>
-                    </div>
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
 
-                    {/* Контент профиля */}
-                    <div className="space-y-6 px-6 pt-20 pb-8">
-                        <h1 className="mb-8 text-center text-3xl font-bold">
+                    <motion.div
+                        className="space-y-6 px-6 pt-20 pb-8"
+                        style={{ willChange: 'opacity, transform' }}
+                    >
+                        <motion.h1
+                            className="mb-8 text-center text-3xl font-bold select-all"
+                            {...fadeInUp(0.5)}
+                            style={{ willChange: 'opacity, transform' }}
+                        >
                             {authUser?.name} {authUser?.lastName}
-                            <div className="bg-primary mx-auto mt-2 h-1 w-20 rounded-full" />
-                        </h1>
+                            <motion.div
+                                className="bg-primary mx-auto mt-2 h-1 w-20 rounded-full"
+                                layoutId="underline"
+                                style={{ willChange: 'opacity, transform' }}
+                            />
+                        </motion.h1>
 
-                        {/* Карточка с информацией */}
                         <div className="space-y-4">
-                            <div className="bg-base-200 hover:bg-base-300 flex items-center gap-4 rounded-lg p-4 transition-colors">
+                            <motion.div
+                                className="bg-base-200 hover:bg-base-300 flex items-center gap-4 rounded-lg p-4"
+                                {...fadeInUp(0.6)}
+                                style={{ willChange: 'opacity, transform' }}
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="text-primary h-6 w-6"
@@ -46,13 +96,17 @@ export const ProfilePage = () => {
                                     <p className="text-sm opacity-75">
                                         Полное имя
                                     </p>
-                                    <p className="font-medium">
+                                    <p className="font-medium select-all">
                                         {authUser?.name} {authUser?.lastName}
                                     </p>
                                 </div>
-                            </div>
+                            </motion.div>
 
-                            <div className="bg-base-200 hover:bg-base-300 flex items-center gap-4 rounded-lg p-4 transition-colors">
+                            <motion.div
+                                className="bg-base-200 hover:bg-base-300 flex items-center gap-4 rounded-lg p-4"
+                                {...fadeInUp(0.7)}
+                                style={{ willChange: 'opacity, transform' }}
+                            >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     className="text-secondary h-6 w-6"
@@ -71,16 +125,19 @@ export const ProfilePage = () => {
                                     <p className="text-sm opacity-75">
                                         Электронная почта
                                     </p>
-                                    <p className="font-medium break-all">
+                                    <p className="font-medium break-all select-all">
                                         {authUser?.email}
                                     </p>
                                 </div>
-                            </div>
+                            </motion.div>
                         </div>
 
-                        {/* Статистика */}
-                        <div className="mt-8 grid grid-cols-2 gap-4">
-                            <div className="stats bg-base-200 shadow">
+                        <motion.div className="mt-8 grid grid-cols-2 gap-4">
+                            <motion.div
+                                className="stats bg-base-200 shadow"
+                                {...fadeInUp(0.8)}
+                                style={{ willChange: 'opacity, transform' }}
+                            >
                                 <div className="stat">
                                     <div className="stat-title">Активность</div>
                                     <div className="stat-value text-primary">
@@ -90,8 +147,12 @@ export const ProfilePage = () => {
                                         За последний месяц
                                     </div>
                                 </div>
-                            </div>
-                            <div className="stats bg-base-200 shadow">
+                            </motion.div>
+                            <motion.div
+                                className="stats bg-base-200 shadow"
+                                {...fadeInUp(0.9)}
+                                style={{ willChange: 'opacity, transform' }}
+                            >
                                 <div className="stat">
                                     <div className="stat-title">Проекты</div>
                                     <div className="stat-value text-secondary">
@@ -101,19 +162,27 @@ export const ProfilePage = () => {
                                         Активные задачи
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div className="flex justify-center">
-                            <button
+                            </motion.div>
+                        </motion.div>
+
+                        <motion.div
+                            className="flex justify-center"
+                            {...fadeInUp(1)}
+                            style={{ willChange: 'opacity, transform' }}
+                        >
+                            <motion.button
                                 className="btn btn-secondary mx-2"
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={logout}
+                                style={{ willChange: 'transform' }}
                             >
                                 Выйти
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+                            </motion.button>
+                        </motion.div>
+                    </motion.div>
+                </motion.div>
+            </motion.div>
+        </motion.div>
     );
 };
