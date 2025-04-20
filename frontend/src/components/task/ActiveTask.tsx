@@ -19,7 +19,7 @@ export const ActiveTask: React.FC<Task & { isDragging?: boolean }> = ({
 
     return (
         <div
-            className={`bg-base-100 mx-auto flex w-full cursor-grab items-center gap-1 rounded-2xl p-3 transition-transform`}
+            className={`bg-base-100 shadow-base-100/60 mx-auto flex w-full cursor-grab items-center gap-1 rounded-2xl p-3 shadow-xl transition-transform`}
             onClick={() => {
                 if (!isDragging) {
                     openDrawer(props._id);

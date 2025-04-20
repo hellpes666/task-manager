@@ -42,11 +42,20 @@ export const TasksSection = () => {
 
     const pointerSensor = useSensor(PointerSensor, {
         activationConstraint: {
-            distance: 0.5,
+            distance: 50,
         },
     });
-    const mouseSensor = useSensor(MouseSensor);
-    const touchSensor = useSensor(TouchSensor);
+    const mouseSensor = useSensor(MouseSensor, {
+        activationConstraint: {
+            distance: 100,
+        },
+    });
+    const touchSensor = useSensor(TouchSensor, {
+        activationConstraint: {
+            delay: 250,
+            tolerance: 5,
+        },
+    });
     const keyboardSensor = useSensor(KeyboardSensor);
 
     const sensors = useSensors(
