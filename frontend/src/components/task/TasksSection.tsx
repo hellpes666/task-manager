@@ -16,9 +16,10 @@ import { TasksGroup } from './TasksGroup';
 import { ActiveTask } from './activeTask';
 import { useState } from 'react';
 import { ITasksData, Task } from '../../entity/Task.entity';
+import { Loader } from 'lucide-react';
 
 export const TasksSection = () => {
-    const { activeTasks, updateTaskData } = useTaskStore();
+    const { activeTasks, updateTaskData, isLoadingAllTasks } = useTaskStore();
     const [activeTaskId, setActiveTaskId] = useState<string | null>(null);
 
     const handleDragEnd = (event: DragEndEvent) => {
@@ -73,7 +74,11 @@ export const TasksSection = () => {
             onDragStart={(e) => setActiveTaskId(e.active.id as string)}
         >
             <section className="bg-base-300 mt-10 flex h-[70vh] w-full items-center gap-16 overflow-x-auto scroll-smooth rounded-xl px-15 pb-5">
-                {activeTasks && activeTasks.length > 0 ? (
+                {isLoadingAllTasks ? (
+                    <div className="mx-auto">
+                        <Loader className="size-10 animate-spin" />
+                    </div>
+                ) : activeTasks && activeTasks.length > 0 ? (
                     activeTasks.map((props) => (
                         <TasksGroup
                             {...props}
@@ -88,6 +93,7 @@ export const TasksSection = () => {
                         className="w-full text-center"
                     />
                 )}
+                {}
             </section>
             <DragOverlay>
                 {activeTaskId ? (

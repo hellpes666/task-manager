@@ -5,7 +5,7 @@ import { TaskForm, PriorityForm, StatusForm } from '../components/modals';
 import { useOpenModal } from '../hooks';
 import { useTaskStore } from '../store/useTaskStore';
 import { Title } from '../ui';
-import { Loader } from 'lucide-react';
+
 import { TaskDrawer } from '../components/Drawer/TaskDrawer';
 
 export const TaskManagmentPage = () => {
@@ -18,7 +18,7 @@ export const TaskManagmentPage = () => {
     const { isOpenModal: isOpenStatusModel, toggleModal: toggleStatusModel } =
         useOpenModal();
 
-    const { getAllTasks, isLoadingAllTasks, getAllStatuses, getAllPriorities } =
+    const { getAllTasks,  getAllStatuses, getAllPriorities } =
         useTaskStore();
 
     useEffect(() => {
@@ -26,14 +26,6 @@ export const TaskManagmentPage = () => {
         getAllStatuses();
         getAllPriorities();
     }, [getAllTasks, getAllStatuses, getAllPriorities]);
-
-    if (isLoadingAllTasks) {
-        return (
-            <div className="flex h-screen items-center justify-center">
-                <Loader className="size-10 animate-spin" />
-            </div>
-        );
-    }
 
     return (
         <div className="flex h-full w-full flex-col overflow-y-hidden">
